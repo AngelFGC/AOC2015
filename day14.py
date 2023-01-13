@@ -50,26 +50,32 @@ class Reindeer(object):
     points:int = field(init=False, compare=False, default=0)
 
     def update(self):
-        self.timerun += 1
         time_in_block = self.timerun % (self.time + self.rest)
         if time_in_block < self.time:
             self.distance += self.speed
+        self.timerun += 1
 
 def part2():
     inp = read()
     total_time = 2503
     reindeers = [Reindeer(n,s,t,r) for n,s,t,r in inp]
 
-    for _ in range(total_time):
+    for i in range(total_time):
         for rdeer in reindeers:
             rdeer.update()
-        reindeers.sort()
-        reindeers[-1].points += 1
+        maxdist = max(reindeers).distance
+        for r in reindeers[::-1]:
+            if r.distance == maxdist:
+                r.points += 1
     
     reindeers.sort(key=lambda r: r.points)
-    print(reindeers)
+    print(reindeers[0].timerun)
+    pts = [r.points for r in reindeers]
+    print(pts[-1])
+    print(pts)
+    print(sum(pts))
 
 
 if __name__ == "__main__":
-    part1()
+    #part1()
     part2()
